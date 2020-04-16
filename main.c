@@ -11,7 +11,9 @@
 #define DEFAULT_BACKLOG 100
 
 static ushort port = DEFAULT_PORT;
+// 在 insmod 時，可以給予的參數
 module_param(port, ushort, S_IRUGO);
+
 static ushort backlog = DEFAULT_BACKLOG;
 module_param(backlog, ushort, S_IRUGO);
 
@@ -33,16 +35,30 @@ static int open_listen_socket(ushort port, ushort backlog, struct socket **res)
     struct socket *sock;
     struct sockaddr_in s;
 
+    // 或許可以看看 struct sock 有哪些欄位 ??
+    // 也可以學習 kernel driver 怎麼使用工具來 debug ？？ kernel pwn
+    // 的基礎可以來學習一下了 ??
+
+    // Guess : 創建 socket
+    //
+    // PF_INET : 使用 IPv4
+    // SOCK_STREAM : 提供一個“序列化”以及可靠的 “byte stream”
+    // IPPROTO_TCP : 指定使用 TCP 協定
+    //
+    // Q: 什麼是序列化？
     int err = sock_create(PF_INET, SOCK_STREAM, IPPROTO_TCP, &sock);
     if (err < 0) {
         pr_err("sock_create() failure, err=%d\n", err);
         return err;
     }
 
+    // Guess : 對已經建好的 socket 進行設定
     err = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, 1);
     if (err < 0)
         goto bail_setsockopt;
 
+    // SOL_TCP : 使用 TCP 協定的 API
+    // TCP_NODELAY : 關係 TCP 資料處理的 Nagle's Algorithm
     err = setsockopt(sock, SOL_TCP, TCP_NODELAY, 1);
     if (err < 0)
         goto bail_setsockopt;
@@ -63,12 +79,23 @@ static int open_listen_socket(ushort port, ushort backlog, struct socket **res)
     s.sin_family = AF_INET;
     s.sin_addr.s_addr = htonl(INADDR_ANY);
     s.sin_port = htons(port);
+    // 綁定一個網路位址
+    // Guess : 將建立出來的 socket 進行一些初始化後 (sock_create) ，開啟某些設定
+    // (kernel_setsockopt) ， sockaddr_in （變數 s）就是網路位址
     err = kernel_bind(sock, (struct sockaddr *) &s, sizeof(s));
     if (err < 0) {
         pr_err("kernel_bind() failure, err=%d\n", err);
         goto bail_sock;
     }
 
+    // DEFAULT_BACKLOG : 紀錄 pending connection 資訊(因為 client 端有可能在
+    // server 呼叫 accept() 之前就呼叫 connect()) Q: 看不懂上面那一段的意思
+    //
+    // Q: backlog??
+    // A: https://elixir.bootlin.com/linux/latest/source/net/socket.c#L3619 ,
+    // pending connections queue size
+    //
+    // Q: server 端的 connect v.s. client 端的 accept
     err = kernel_listen(sock, backlog);
     if (err < 0) {
         pr_err("kernel_listen() failure, err=%d\n", err);
@@ -86,19 +113,37 @@ bail_sock:
 
 static void close_listen_socket(struct socket *socket)
 {
+    // kernel_sock_shutdown :
+    // https://elixir.bootlin.com/linux/latest/source/net/socket.c#L3830
+    // kernel_sock_shutdown(struct socket *sock, enum sock_shutdown_cmd how);
+    //
+    // sock_shutdown_cmd :
+    // https://elixir.bootlin.com/linux/latest/source/include/linux/net.h#L88
     kernel_sock_shutdown(socket, SHUT_RDWR);
+
+    // 釋放 socket object
     sock_release(socket);
 }
 
 static int __init khttpd_init(void)
 {
+    // 初始化 socket
+    // 設定 socket
+    // 將 socket 綁定在某個 port 上
+    // 開始聆聽這個 port
     int err = open_listen_socket(port, backlog, &listen_socket);
     if (err < 0) {
         pr_err("can't open listen socket\n");
         return err;
     }
+
+    // http_server_param
     param.listen_socket = listen_socket;
+
+    // 建立一個 kernel thread 並執行它
+    // static struct task_struct *http_server;
     http_server = kthread_run(http_server_daemon, &param, KBUILD_MODNAME);
+
     if (IS_ERR(http_server)) {
         pr_err("can't start http server daemon\n");
         close_listen_socket(listen_socket);
@@ -110,7 +155,10 @@ static int __init khttpd_init(void)
 static void __exit khttpd_exit(void)
 {
     send_sig(SIGTERM, http_server, 1);
+
+    // 停止 kthread 的運行
     kthread_stop(http_server);
+
     close_listen_socket(listen_socket);
     pr_info("module unloaded\n");
 }
