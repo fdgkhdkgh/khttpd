@@ -21,6 +21,8 @@ static struct socket *listen_socket;
 static struct http_server_param param;
 static struct task_struct *http_server;
 
+struct workqueue_struct *khttpd_wq;
+
 static inline int setsockopt(struct socket *sock,
                              int level,
                              int optname,
@@ -142,6 +144,9 @@ static int __init khttpd_init(void)
     // http_server_param
     param.listen_socket = listen_socket;
 
+    khttpd_wq = alloc_workqueue("khttpd_wq", WQ_UNBOUND, 0);
+
+    printk("khttpd_wq : 0x%x\n", khttpd_wq);
     // 建立一個 kernel thread 並執行它
     // static struct task_struct *http_server;
     //
@@ -165,6 +170,9 @@ static void __exit khttpd_exit(void)
     kthread_stop(http_server);
 
     close_listen_socket(listen_socket);
+
+    destroy_workqueue(khttpd_wq);
+
     pr_info("module unloaded\n");
 }
 

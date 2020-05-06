@@ -52,6 +52,8 @@
 
 typedef void (*sighandler_t)(int);
 
+#define RAND_SEED 10
+
 #define HTTP_REQUEST_PREFIX "http://"
 
 #define HTTP_REQUEST_FMT "GET %s HTTP/1.0\r\nHost: %s\r\n\r\n"
@@ -59,7 +61,8 @@ typedef void (*sighandler_t)(int);
 #define HTTP_REQUEST_DEBUG 0x01
 #define HTTP_RESPONSE_DEBUG 0x02
 
-#define INBUFSIZE 1024
+//#define INBUFSIZE 1024
+#define INBUFSIZE 3096
 
 #define BAD_REQUEST 0x1
 
@@ -98,6 +101,11 @@ static int exit_i = 0;
 static struct timeval tv, tve;
 
 static const char short_options[] = "n:c:t:u:h:d46";
+
+// workaround
+char *host = NULL;
+char *node = NULL;
+char *port = "http";
 
 
 static const struct option long_options[] = {
@@ -170,6 +178,14 @@ static void *worker(void *arg)
     char inbuf[INBUFSIZE];
     struct econn ecs[concurrency], *ec;
 
+    // workaround
+    size_t local_outbufsize = outbufsize + 50;
+    size_t temp_outbufsize;
+    char *local_outbuf = (char *)malloc(local_outbufsize);
+    //snprintf(local_outbuf, local_outbufsize,  "GET /fib/%u HTTP/1.0\r\nHost: %s\r\n\r\n", 5, host);
+    //temp_outbufsize = strlen(local_outbuf);
+    //printf("local_outbuf : %s\n", local_outbuf);
+
     (void) arg;
 
     int efd = epoll_create(concurrency);
@@ -231,10 +247,16 @@ static void *worker(void *arg)
             }
 
             if (evts[n].events & EPOLLOUT) {
-                ret = send(ec->fd, outbuf + ec->offs, outbufsize - ec->offs, 0);
+		// do string things here probably a bad idea    
+	        unsigned int k = rand()%301;	
+                snprintf(local_outbuf, local_outbufsize,  "GET /fib/%u HTTP/1.0\r\nHost: %s\r\n\r\n", k, host);
 
-                //printf("outbuf + ec->offs : %s\n", outbuf + ec->offs);
-                //printf("ec->offs : %lu\n", ec->offs);
+		printf("f[%u]\n", k);
+                //ret = send(ec->fd, outbuf + ec->offs, outbufsize - ec->offs, 0);
+                //ret = send(ec->fd, local_outbuf + ec->offs, temp_outbufsize - ec->offs, 0);
+                ret = send(ec->fd, local_outbuf + ec->offs, local_outbufsize - ec->offs, 0);
+               
+                //printf("local_outbuf : %s\n", local_outbuf);
 
                 if (ret == -1 && errno != EAGAIN) {
                     /* TODO: something better than this */
@@ -243,13 +265,18 @@ static void *worker(void *arg)
                 }
 
                 if (ret > 0) {
+                    //printf("write to outbuf\n");
                     if (debug & HTTP_REQUEST_DEBUG)
                         write(2, outbuf + ec->offs, outbufsize - ec->offs);
 
                     ec->offs += ret;
 
                     /* write done? schedule read */
-                    if (ec->offs == outbufsize) {
+                    //if (ec->offs == outbufsize) {
+                    //if (ec->offs == temp_outbufsize) {
+                    if (ec->offs == local_outbufsize) {
+                        //printf("ec->offs == outbufsize\n");
+
                         evts[n].events = EPOLLIN;
                         evts[n].data.ptr = ec;
 
@@ -303,6 +330,8 @@ static void *worker(void *arg)
                     if (max_requests && (m + 1 >= (int) max_requests)) {
                         end_time();
 			// 把 thread 給砍掉
+		
+                        free(local_outbuf);
                         return NULL;
                     }
 
@@ -341,10 +370,20 @@ static void print_usage()
 
 int main(int argc, char *argv[])
 {
+
+    srand(RAND_SEED);
+    
+    for (int i = 0;i < 10;i++) {
+        printf("%d\n", rand() % 1000);
+    }
+
+
     pthread_t useless_thread;
-    char *host = NULL;
-    char *node = NULL;
-    char *port = "http";
+
+    // workaround
+    //char *host = NULL;
+    //char *node = NULL;
+    //char *port = "http";
     struct sockaddr_in *ssin = (struct sockaddr_in *) &sss;
     struct sockaddr_in6 *ssin6 = (struct sockaddr_in6 *) &sss;
     struct sockaddr_un *ssun = (struct sockaddr_un *) &sss;
