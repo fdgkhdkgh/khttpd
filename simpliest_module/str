@@ -1,0 +1,50 @@
+QV@{
+start simple module init !!
+stop simple module !!
+version=0.1
+description=kthread sample
+author=NCTU, Taiwan
+license=Dual MIT/GPL
+srcversion=E9767A16525DC4038C529E6
+depends=
+retpoline=Y
+name=simple
+vermagic=5.3.0-51-generic SMP mod_unload 
+Linux
+simple
+GCC: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+GCC: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+main.c
+simple_init
+simple_exit
+__UNIQUE_ID_version24
+__UNIQUE_ID_description23
+__UNIQUE_ID_author22
+__UNIQUE_ID_license21
+simple.mod.c
+__UNIQUE_ID_srcversion24
+__module_depends
+__UNIQUE_ID_retpoline23
+__UNIQUE_ID_name22
+__UNIQUE_ID_vermagic21
+_note_6
+__this_module
+cleanup_module
+__fentry__
+init_module
+printk
+.symtab
+.strtab
+.shstrtab
+.note.gnu.build-id
+.rela.init.text
+.rela.exit.text
+.rodata.str1.1
+.rela__mcount_loc
+.modinfo
+.note.Linux
+.data
+.rela.gnu.linkonce.this_module
+.bss
+.comment
+.note.GNU-stack

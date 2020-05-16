@@ -1,0 +1,241 @@
+
+./simple.ko：     檔案格式 elf64-x86-64
+
+
+Disassembly of section .note.gnu.build-id:
+
+0000000000000000 <.note.gnu.build-id>:
+   0:	04 00                	add    al,0x0
+   2:	00 00                	add    BYTE PTR [rax],al
+   4:	14 00                	adc    al,0x0
+   6:	00 00                	add    BYTE PTR [rax],al
+   8:	03 00                	add    eax,DWORD PTR [rax]
+   a:	00 00                	add    BYTE PTR [rax],al
+   c:	47                   	rex.RXB
+   d:	4e 55                	rex.WRX push rbp
+   f:	00 05 1e 8e 61 fe    	add    BYTE PTR [rip+0xfffffffffe618e1e],al        # fffffffffe618e33 <__UNIQUE_ID_vermagic21+0xfffffffffe618d9a>
+  15:	9d                   	popf   
+  16:	10 fe                	adc    dh,bh
+  18:	0e                   	(bad)  
+  19:	cb                   	retf   
+  1a:	51                   	push   rcx
+  1b:	56                   	push   rsi
+  1c:	40 7b 01             	rex jnp 20 <.note.gnu.build-id+0x20>
+  1f:	f9                   	stc    
+  20:	92                   	xchg   edx,eax
+  21:	ee                   	out    dx,al
+  22:	ea                   	(bad)  
+  23:	94                   	xchg   esp,eax
+
+Disassembly of section .init.text:
+
+0000000000000000 <init_module>:
+   0:	e8 00 00 00 00       	call   5 <init_module+0x5>
+   5:	55                   	push   rbp
+   6:	48 c7 c7 00 00 00 00 	mov    rdi,0x0
+   d:	48 89 e5             	mov    rbp,rsp
+  10:	e8 00 00 00 00       	call   15 <init_module+0x15>
+  15:	31 c0                	xor    eax,eax
+  17:	5d                   	pop    rbp
+  18:	c3                   	ret    
+
+Disassembly of section .exit.text:
+
+0000000000000000 <cleanup_module>:
+   0:	55                   	push   rbp
+   1:	48 c7 c7 00 00 00 00 	mov    rdi,0x0
+   8:	48 89 e5             	mov    rbp,rsp
+   b:	e8 00 00 00 00       	call   10 <cleanup_module+0x10>
+  10:	5d                   	pop    rbp
+  11:	c3                   	ret    
+
+Disassembly of section .rodata.str1.1:
+
+0000000000000000 <.rodata.str1.1>:
+   0:	73 74                	jae    76 <__UNIQUE_ID_srcversion24+0x26>
+   2:	61                   	(bad)  
+   3:	72 74                	jb     79 <__module_depends+0x1>
+   5:	20 73 69             	and    BYTE PTR [rbx+0x69],dh
+   8:	6d                   	ins    DWORD PTR es:[rdi],dx
+   9:	70 6c                	jo     77 <__UNIQUE_ID_srcversion24+0x27>
+   b:	65 20 6d 6f          	and    BYTE PTR gs:[rbp+0x6f],ch
+   f:	64 75 6c             	fs jne 7e <__module_depends+0x6>
+  12:	65 20 69 6e          	and    BYTE PTR gs:[rcx+0x6e],ch
+  16:	69 74 20 21 21 0a 00 	imul   esi,DWORD PTR [rax+riz*1+0x21],0x73000a21
+  1d:	73 
+  1e:	74 6f                	je     8f <__UNIQUE_ID_name22+0x2>
+  20:	70 20                	jo     42 <__UNIQUE_ID_license21+0x7>
+  22:	73 69                	jae    8d <__UNIQUE_ID_name22>
+  24:	6d                   	ins    DWORD PTR es:[rdi],dx
+  25:	70 6c                	jo     93 <__UNIQUE_ID_name22+0x6>
+  27:	65 20 6d 6f          	and    BYTE PTR gs:[rbp+0x6f],ch
+  2b:	64 75 6c             	fs jne 9a <__UNIQUE_ID_vermagic21+0x1>
+  2e:	65 20 21             	and    BYTE PTR gs:[rcx],ah
+  31:	21 0a                	and    DWORD PTR [rdx],ecx
+	...
+
+Disassembly of section __mcount_loc:
+
+0000000000000000 <__mcount_loc>:
+	...
+
+Disassembly of section .modinfo:
+
+0000000000000000 <__UNIQUE_ID_version24>:
+   0:	76 65                	jbe    67 <__UNIQUE_ID_srcversion24+0x17>
+   2:	72 73                	jb     77 <__UNIQUE_ID_srcversion24+0x27>
+   4:	69 6f 6e 3d 30 2e 31 	imul   ebp,DWORD PTR [rdi+0x6e],0x312e303d
+	...
+
+000000000000000c <__UNIQUE_ID_description23>:
+   c:	64 65 73 63          	fs gs jae 73 <__UNIQUE_ID_srcversion24+0x23>
+  10:	72 69                	jb     7b <__module_depends+0x3>
+  12:	70 74                	jo     88 <__UNIQUE_ID_retpoline23+0x7>
+  14:	69 6f 6e 3d 6b 74 68 	imul   ebp,DWORD PTR [rdi+0x6e],0x68746b3d
+  1b:	72 65                	jb     82 <__UNIQUE_ID_retpoline23+0x1>
+  1d:	61                   	(bad)  
+  1e:	64 20 73 61          	and    BYTE PTR fs:[rbx+0x61],dh
+  22:	6d                   	ins    DWORD PTR es:[rdi],dx
+  23:	70 6c                	jo     91 <__UNIQUE_ID_name22+0x4>
+  25:	65 00            	add    BYTE PTR gs:[rcx+0x75],ah
+
+0000000000000027 <__UNIQUE_ID_author22>:
+  27:	61                   	(bad)  
+  28:	75 74                	jne    9e <__UNIQUE_ID_vermagic21+0x5>
+  2a:	68 6f 72 3d 4e       	push   0x4e3d726f
+  2f:	43 54                	rex.XB push r12
+  31:	55                   	push   rbp
+  32:	2c 20                	sub    al,0x20
+  34:	54                   	push   rsp
+  35:	61                   	(bad)  
+  36:	69 77 61 6e 00   	imul   esi,DWORD PTR [rdi+0x61],0x696c006e
+
+000000000000003b <__UNIQUE_ID_license21>:
+  3b:	6c                   	ins    BYTE PTR es:[rdi],dx
+  3c:	69 63 65 6e 73 65 3d 	imul   esp,DWORD PTR [rbx+0x65],0x3d65736e
+  43:	44 75 61             	rex.R jne a7 <__UNIQUE_ID_vermagic21+0xe>
+  46:	6c                   	ins    BYTE PTR es:[rdi],dx
+  47:	20 4d 49             	and    BYTE PTR [rbp+0x49],cl
+  4a:	54                   	push   rsp
+  4b:	2f                   	(bad)  
+  4c:	47 50                	rex.RXB push r8
+  4e:	4c 00            	rex.WR add BYTE PTR [rbx+0x72],r14b
+
+0000000000000050 <__UNIQUE_ID_srcversion24>:
+  50:	73 72                	jae    c4 <__UNIQUE_ID_vermagic21+0x2b>
+  52:	63 76 65             	movsxd esi,DWORD PTR [rsi+0x65]
+  55:	72 73                	jb     ca <__UNIQUE_ID_vermagic21+0x31>
+  57:	69 6f 6e 3d 45 39 37 	imul   ebp,DWORD PTR [rdi+0x6e],0x3739453d
+  5e:	36 37                	ss (bad) 
+  60:	41 31 36             	xor    DWORD PTR [r14],esi
+  63:	35 32 35 44 43       	xor    eax,0x43443532
+  68:	34 30                	xor    al,0x30
+  6a:	33 38                	xor    edi,DWORD PTR [rax]
+  6c:	43 35 32 39 45 36    	rex.XB xor eax,0x36453932
+  72:	00 00                	add    BYTE PTR [rax],al
+  74:	00 00                	add    BYTE PTR [rax],al
+	...
+
+0000000000000078 <__module_depends>:
+  78:	64 65 70 65          	fs gs jo e1 <__UNIQUE_ID_vermagic21+0x48>
+  7c:	6e                   	outs   dx,BYTE PTR ds:[rsi]
+  7d:	64 73 3d             	fs jae bd <__UNIQUE_ID_vermagic21+0x24>
+	...
+
+0000000000000081 <__UNIQUE_ID_retpoline23>:
+  81:	72 65                	jb     e8 <__UNIQUE_ID_vermagic21+0x4f>
+  83:	74 70                	je     f5 <__UNIQUE_ID_vermagic21+0x5c>
+  85:	6f                   	outs   dx,DWORD PTR ds:[rsi]
+  86:	6c                   	ins    BYTE PTR es:[rdi],dx
+  87:	69 6e 65 3d 59 00  	imul   ebp,DWORD PTR [rsi+0x65],0x6e00593d
+
+000000000000008d <__UNIQUE_ID_name22>:
+  8d:	6e                   	outs   dx,BYTE PTR ds:[rsi]
+  8e:	61                   	(bad)  
+  8f:	6d                   	ins    DWORD PTR es:[rdi],dx
+  90:	65 3d 73 69 6d 70    	gs cmp eax,0x706d6973
+  96:	6c                   	ins    BYTE PTR es:[rdi],dx
+  97:	65 00            	add    BYTE PTR gs:[rsi+0x65],dh
+
+0000000000000099 <__UNIQUE_ID_vermagic21>:
+  99:	76 65                	jbe    100 <__UNIQUE_ID_vermagic21+0x67>
+  9b:	72 6d                	jb     10a <__UNIQUE_ID_vermagic21+0x71>
+  9d:	61                   	(bad)  
+  9e:	67 69 63 3d 35 2e 33 	imul   esp,DWORD PTR [ebx+0x3d],0x2e332e35
+  a5:	2e 
+  a6:	30 2d 35 31 2d 67    	xor    BYTE PTR [rip+0x672d3135],ch        # 672d31e1 <__UNIQUE_ID_vermagic21+0x672d3148>
+  ac:	65 6e                	outs   dx,BYTE PTR gs:[rsi]
+  ae:	65 72 69             	gs jb  11a <__UNIQUE_ID_vermagic21+0x81>
+  b1:	63 20                	movsxd esp,DWORD PTR [rax]
+  b3:	53                   	push   rbx
+  b4:	4d 50                	rex.WRB push r8
+  b6:	20 6d 6f             	and    BYTE PTR [rbp+0x6f],ch
+  b9:	64 5f                	fs pop rdi
+  bb:	75 6e                	jne    12b <__UNIQUE_ID_vermagic21+0x92>
+  bd:	6c                   	ins    BYTE PTR es:[rdi],dx
+  be:	6f                   	outs   dx,DWORD PTR ds:[rsi]
+  bf:	61                   	(bad)  
+  c0:	64 20 00             	and    BYTE PTR fs:[rax],al
+
+Disassembly of section .note.Linux:
+
+0000000000000000 <_note_6>:
+   0:	06                   	(bad)  
+   1:	00 00                	add    BYTE PTR [rax],al
+   3:	00 01                	add    BYTE PTR [rcx],al
+   5:	00 00                	add    BYTE PTR [rax],al
+   7:	00 00                	add    BYTE PTR [rax],al
+   9:	01 00                	add    DWORD PTR [rax],eax
+   b:	00 4c 69 6e          	add    BYTE PTR [rcx+rbp*2+0x6e],cl
+   f:	75 78                	jne    89 <__UNIQUE_ID_retpoline23+0x8>
+  11:	00 00                	add    BYTE PTR [rax],al
+  13:	00 00                	add    BYTE PTR [rax],al
+  15:	00 00                	add    BYTE PTR [rax],al
+	...
+
+Disassembly of section .gnu.linkonce.this_module:
+
+0000000000000000 <__this_module>:
+	...
+  18:	73 69                	jae    83 <__this_module+0x83>
+  1a:	6d                   	ins    DWORD PTR es:[rdi],dx
+  1b:	70 6c                	jo     89 <__this_module+0x89>
+  1d:	65 00 00             	add    BYTE PTR gs:[rax],al
+	...
+
+Disassembly of section .comment:
+
+0000000000000000 <.comment>:
+   0:	00 47 43             	add    BYTE PTR [rdi+0x43],al
+   3:	43 3a 20             	rex.XB cmp spl,BYTE PTR [r8]
+   6:	28 55 62             	sub    BYTE PTR [rbp+0x62],dl
+   9:	75 6e                	jne    79 <__module_depends+0x1>
+   b:	74 75                	je     82 <__UNIQUE_ID_retpoline23+0x1>
+   d:	20 37                	and    BYTE PTR [rdi],dh
+   f:	2e 35 2e 30 2d 33    	cs xor eax,0x332d302e
+  15:	75 62                	jne    79 <__module_depends+0x1>
+  17:	75 6e                	jne    87 <__UNIQUE_ID_retpoline23+0x6>
+  19:	74 75                	je     90 <__UNIQUE_ID_name22+0x3>
+  1b:	31 7e 31             	xor    DWORD PTR [rsi+0x31],edi
+  1e:	38 2e                	cmp    BYTE PTR [rsi],ch
+  20:	30 34 29             	xor    BYTE PTR [rcx+rbp*1],dh
+  23:	20 37                	and    BYTE PTR [rdi],dh
+  25:	2e 35 2e 30 00 00    	cs xor eax,0x302e
+  2b:	47                   	rex.RXB
+  2c:	43                   	rex.XB
+  2d:	43 3a 20             	rex.XB cmp spl,BYTE PTR [r8]
+  30:	28 55 62             	sub    BYTE PTR [rbp+0x62],dl
+  33:	75 6e                	jne    a3 <__UNIQUE_ID_vermagic21+0xa>
+  35:	74 75                	je     ac <__UNIQUE_ID_vermagic21+0x13>
+  37:	20 37                	and    BYTE PTR [rdi],dh
+  39:	2e 35 2e 30 2d 33    	cs xor eax,0x332d302e
+  3f:	75 62                	jne    a3 <__UNIQUE_ID_vermagic21+0xa>
+  41:	75 6e                	jne    b1 <__UNIQUE_ID_vermagic21+0x18>
+  43:	74 75                	je     ba <__UNIQUE_ID_vermagic21+0x21>
+  45:	31 7e 31             	xor    DWORD PTR [rsi+0x31],edi
+  48:	38 2e                	cmp    BYTE PTR [rsi],ch
+  4a:	30 34 29             	xor    BYTE PTR [rcx+rbp*1],dh
+  4d:	20 37                	and    BYTE PTR [rdi],dh
+  4f:	2e                   	cs
+  50:	35                   	.byte 0x35
+  51:	2e 30 00             	xor    BYTE PTR cs:[rax],al

@@ -367,7 +367,6 @@ static void http_server_worker(struct work_struct *work)
         .on_message_complete = http_parser_callback_message_complete};
     struct http_request request;
 
-    printk("worker->sock : 0x%x\n", worker->sock);
 
     struct socket *socket = (struct socket *) worker->sock;
 
@@ -384,8 +383,8 @@ static void http_server_worker(struct work_struct *work)
     http_parser_init(&parser, HTTP_REQUEST);
     parser.data = &request;
 
-    //while (!daemon.is_stopped) {
-    while (!kthread_should_stop()) {
+    while (!daemon.is_stopped) {
+    //while (!kthread_should_stop()) {
         int ret = http_server_recv(socket, buf, RECV_BUFFER_SIZE - 1);
         if (ret <= 0) {
             if (ret)
@@ -406,8 +405,6 @@ static void http_server_worker(struct work_struct *work)
 // for workqueue
 // 參考（抄） kecho 的寫法
 static struct work_struct *create_work(struct socket *sk) {
-
-    printk("in create_work\n");
 
     struct khttpd_worker *khttpd_work;
 
@@ -459,8 +456,6 @@ int http_server_daemon(void *arg)
  
     while (!kthread_should_stop()) {
 
-        printk("hi 1!\n");
-
         int err = kernel_accept(param->listen_socket, &socket, 0);
         if (err < 0) {
             if (signal_pending(current))
@@ -469,7 +464,6 @@ int http_server_daemon(void *arg)
             continue;
         }
 
-	printk("hi 2!\n");
 
 	// kthread worker start
         //worker = kthread_run(http_server_worker, socket, KBUILD_MODNAME);
@@ -480,8 +474,6 @@ int http_server_daemon(void *arg)
         //
 	// kthread worker end
 	
-        printk("socket : 0x%x\n", socket);
-
 	// cmwq worker start
         if (unlikely(!(worker = create_work(socket)))) {
             pr_err("can't create more worker\n");
@@ -493,6 +485,8 @@ int http_server_daemon(void *arg)
     }
 
     daemon.is_stopped = true;
-    free_work();
+
+    // 這邊會 NULL Pointer Reference
+    //free_work();
     return 0;
 }

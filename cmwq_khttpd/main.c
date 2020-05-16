@@ -146,7 +146,7 @@ static int __init khttpd_init(void)
 
     khttpd_wq = alloc_workqueue("khttpd_wq", WQ_UNBOUND, 0);
 
-    printk("khttpd_wq : 0x%x\n", khttpd_wq);
+    //printk("khttpd_wq : 0x%x\n", khttpd_wq);
     // 建立一個 kernel thread 並執行它
     // static struct task_struct *http_server;
     //

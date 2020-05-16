@@ -328,6 +328,7 @@ static void *worker(void *arg)
                         atomic_fetch_add(&good_requests, 1);
 
                     if (max_requests && (m + 1 >= (int) max_requests)) {
+                        // 當請求的數目夠了，就停止計時
                         end_time();
 			// 把 thread 給砍掉
 		
